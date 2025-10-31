@@ -10,11 +10,11 @@ public class StaticData {
     private static final List<Customer> CUSTOMERS = new ArrayList<>();
 
     static {
-        CUSTOMERS.add(createCustomer(1L, "Arun Kumar", "9876543210", "Chennai"));
-        CUSTOMERS.add(createCustomer(2L, "Priya Sharma", "9988776655", "Bangalore"));
-        CUSTOMERS.add(createCustomer(3L, "Rahul Singh", "9090909090", "Hyderabad"));
-        CUSTOMERS.add(createCustomer(4L, "Meena Iyer", "9123456789", "Pune"));
-        CUSTOMERS.add(createCustomer(5L, "Vikram Rao", "9871234567", "Delhi"));
+        CUSTOMERS.add(createCustomer(1L, "Arun", "9876543210", "Chennai"));
+        CUSTOMERS.add(createCustomer(2L, "Dinesh", "9988776655", "Bangalore"));
+        CUSTOMERS.add(createCustomer(3L, "Rahul", "9090909090", "Hyderabad"));
+        CUSTOMERS.add(createCustomer(4L, "Dhivya", "9123456789", "Pune"));
+        CUSTOMERS.add(createCustomer(5L, "Vikram", "9871234567", "Delhi"));
     }
 
     private static Customer createCustomer(Long id, String name, String phone, String city) {
