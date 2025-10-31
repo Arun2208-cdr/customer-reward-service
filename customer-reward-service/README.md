@@ -7,11 +7,11 @@ Rewards follow a 2-tier system:
 - 2 points for every dollar spent over 100
 
 ## Endpoints
-| Method | Endpoint                                                          | Description                                     |
-|--------|-------------------------------------------------------------------|-------------------------------------------------|
-| GET | `/api/rewards`                                                    | Fetch all customer rewards summary              |
-| GET | `/api/rewards/{customerId}`                                       | Fetch single customer's reward summary          |
-| GET | `/api/rewards/period?customerId={customerId}&start=yyyy-MM-dd&end=yyyy-MM-dd` | Fetch single customer's rewards in a date range |
+| Method | Endpoint                                                                      | Description                                     |
+|--------|-------------------------------------------------------------------------------|-------------------------------------------------|
+| GET | `/loyalty/api/rewards`                                                        | Fetch all customer rewards summary              |
+| GET | `/loyalty/api/rewards/{customerId}`                                                   | Fetch single customer's reward summary          |
+| GET | `/loyalty/api/rewards/period?customerId={customerId}&start=yyyy-MM-dd&end=yyyy-MM-dd` | Fetch single customer's rewards in a date range |
 
 ## Example Response
 ```json
