@@ -2,7 +2,13 @@ package com.retail.rewards.controller;
 
 import com.retail.rewards.model.RewardSummary;
 import com.retail.rewards.service.RewardService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,11 +17,8 @@ import java.util.List;
 @RequestMapping("/api/rewards")
 public class RewardController {
 
-    private final RewardService rewardService;
-
-    public RewardController(RewardService rewardService) {
-        this.rewardService = rewardService;
-    }
+    @Autowired
+    private RewardService rewardService;
 
     @GetMapping
     public List<RewardSummary> getAllRewards() {
@@ -28,9 +31,10 @@ public class RewardController {
     }
 
     @GetMapping("/period")
-    public List<RewardSummary> getRewardsForPeriod(@RequestParam String start, @RequestParam String end) {
+    public RewardSummary getRewardsForCustomerForPeriod(@RequestParam Long customerId,
+                                                   @RequestParam String start, @RequestParam String end) {
         LocalDate startDate = LocalDate.parse(start);
         LocalDate endDate = LocalDate.parse(end);
-        return rewardService.getRewardsForPeriod(startDate, endDate);
+        return rewardService.getRewardsForCustomerForPeriod(customerId, startDate, endDate);
     }
 }

@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,8 +21,11 @@ public class RewardService {
     private static final int THRESHOLD_100 = 100;
 
     private int calculatePoints(double amount) {
-        if (amount <= THRESHOLD_50) return 0;
-        if (amount <= THRESHOLD_100) return (int) (amount - THRESHOLD_50);
+        if (amount <= THRESHOLD_50)
+            return 0;
+        if (amount <= THRESHOLD_100)
+            return (int) (amount - THRESHOLD_50);
+
         return (int) ((amount - THRESHOLD_100) * 2 + 50);
     }
 
@@ -37,14 +43,16 @@ public class RewardService {
                 .orElse(null);
     }
 
-    public List<RewardSummary> getRewardsForPeriod(LocalDate start, LocalDate end) {
+    public RewardSummary getRewardsForCustomerForPeriod(Long customerId, LocalDate start, LocalDate end) {
         return StaticData.getCustomers().stream()
+                .filter(c -> c.getId().equals(customerId))
+                .findFirst()
                 .map(c -> calculateCustomerRewards(c, start, end))
-                .collect(Collectors.toList());
+                .orElse(null);
     }
 
     private RewardSummary calculateCustomerRewards(Customer customer) {
-        return calculateCustomerRewards(customer, LocalDate.of(2024,1,1), LocalDate.of(2024,12,31));
+        return calculateCustomerRewards(customer, LocalDate.of(2025,1,1), LocalDate.of(2025,12,31));
     }
 
     private RewardSummary calculateCustomerRewards(Customer customer, LocalDate start, LocalDate end) {

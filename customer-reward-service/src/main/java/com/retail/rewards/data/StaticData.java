@@ -4,7 +4,10 @@ import com.retail.rewards.model.Customer;
 import com.retail.rewards.model.Transaction;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 
 public class StaticData {
     private static final List<Customer> CUSTOMERS = new ArrayList<>();
@@ -24,7 +27,7 @@ public class StaticData {
             int txnCount = 3 + rand.nextInt(3);
             for (int i = 0; i < txnCount; i++) {
                 double amount = 30 + rand.nextInt(150);
-                txns.add(new Transaction(LocalDate.of(2024, m, 1 + rand.nextInt(25)), amount));
+                txns.add(new Transaction(LocalDate.of(2025, m, 1 + rand.nextInt(25)), amount));
             }
         }
         return new Customer(id, name, phone, city, txns);
