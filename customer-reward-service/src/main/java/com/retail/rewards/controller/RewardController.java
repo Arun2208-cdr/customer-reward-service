@@ -1,5 +1,6 @@
 package com.retail.rewards.controller;
 
+import com.retail.rewards.exception.CustomerNotFoundException;
 import com.retail.rewards.model.RewardSummary;
 import com.retail.rewards.service.RewardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,14 @@ public class RewardController {
     }
 
     @GetMapping("/{customerId}")
-    public RewardSummary getRewardsByCustomer(@PathVariable Long customerId) {
+    public RewardSummary getRewardsByCustomer(@PathVariable Long customerId) throws CustomerNotFoundException {
         return rewardService.getRewardsByCustomer(customerId);
     }
 
     @GetMapping("/period")
     public RewardSummary getRewardsForCustomerForPeriod(@RequestParam Long customerId,
-                                                   @RequestParam String start, @RequestParam String end) {
+                                                   @RequestParam String start, @RequestParam String end)
+            throws CustomerNotFoundException {
         LocalDate startDate = LocalDate.parse(start);
         LocalDate endDate = LocalDate.parse(end);
         return rewardService.getRewardsForCustomerForPeriod(customerId, startDate, endDate);
