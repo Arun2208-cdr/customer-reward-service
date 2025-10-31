@@ -20,6 +20,15 @@ public class StaticData {
         CUSTOMERS.add(createCustomer(5L, "Vikram", "9871234567", "Delhi"));
     }
 
+    /**
+     * Generates random transaction data for a customer.
+     *
+     * @param id    the unique ID of the customer
+     * @param name  the name of the customer
+     * @param phone the phone number of the customer
+     * @param city  the city of the customer
+     * @return a {@link Customer} object containing randomly generated transactions
+     */
     private static Customer createCustomer(Long id, String name, String phone, String city) {
         List<Transaction> txns = new ArrayList<>();
         Random rand = new Random(id);
@@ -33,6 +42,11 @@ public class StaticData {
         return new Customer(id, name, phone, city, txns);
     }
 
+    /**
+     * Returns the list of all predefined customers.
+     *
+     * @return a list of {@link Customer} objects
+     */
     public static List<Customer> getCustomers() {
         return CUSTOMERS;
     }

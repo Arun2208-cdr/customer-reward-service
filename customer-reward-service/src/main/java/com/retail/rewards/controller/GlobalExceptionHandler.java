@@ -12,6 +12,13 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * Handles {@link CustomerNotFoundException} and returns a 404 Not Found response.
+     *
+     * @param ex the exception thrown when a customer is not found
+     * @return a {@link ResponseEntity} containing error details such as timestamp, status, and message
+     */
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleCustomerNotFound(CustomerNotFoundException ex) {
         Map<String, Object> error = new HashMap<>();
@@ -22,6 +29,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles all unexpected exceptions and returns a 500 Internal Server Error response.
+     *
+     * @param ex the exception thrown during request processing
+     * @return a {@link ResponseEntity} containing error details such as timestamp, status, and message
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
         Map<String, Object> error = new HashMap<>();
