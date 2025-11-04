@@ -4,11 +4,26 @@
   "phone": "9876543210",
   "city": "Chennai",
   "totalRewards": 2717,
-  "monthlyRewards": {
-    "2025-10": 541,
-    "2025-07": 175,
-    "2025-06": 401,
-    "2025-09": 1301,
-    "2025-08": 299
-  }
+  "monthlyRewards": [
+    {
+      "month": "2025-06",
+      "rewardPoints": 401
+    },
+    {
+      "month": "2025-07",
+      "rewardPoints": 175
+    },
+    {
+      "month": "2025-08",
+      "rewardPoints": 299
+    },
+    {
+      "month": "2025-09",
+      "rewardPoints": 1301
+    },
+    {
+      "month": "2025-10",
+      "rewardPoints": 541
+    }
+  ]
 }

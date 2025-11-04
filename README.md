@@ -39,10 +39,11 @@ You can retrieve the **reward summary** for a single customer over a **specific 
   "phone": "9876543210",
   "city": "Chennai",
   "totalRewards": 115,
-  "monthlyRewards": {
-    "2025-06": 90,
-    "2025-07": 25
-  }
+  "monthlyRewards": [
+      { "month": "2025-07", "rewardPoints": 90 },
+      { "month": "2025-08", "rewardPoints": 60 },
+      { "month": "2025-09", "rewardPoints": 80 }
+  ]
 }
 
 ##  Build and Run the Application
