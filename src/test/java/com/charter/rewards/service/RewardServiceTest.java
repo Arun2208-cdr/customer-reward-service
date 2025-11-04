@@ -8,6 +8,7 @@ import com.charter.rewards.model.Transaction;
 import com.charter.rewards.repository.CustomerRepository;
 import com.charter.rewards.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -68,6 +69,7 @@ class RewardServiceTest {
     }
 
     @Test
+    @DisplayName("Should return correct rewards summary for a valid customer within date range")
     void testGetRewardsForCustomerForPeriod_Success() throws CustomerNotFoundException {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
         when(transactionRepository.findByCustomerIdAndDateBetween(any(), any(), any())).thenReturn(transactions);
@@ -95,9 +97,16 @@ class RewardServiceTest {
                 .findFirst()
                 .orElseThrow();
         assertEquals(25, julyReward.getRewardPoints());
+
+        MonthlyReward augReward = monthlyRewards.stream()
+                .filter(r -> r.getMonth().equals("2025-08"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals(0, augReward.getRewardPoints());
     }
 
     @Test
+    @DisplayName("Should throw CustomerNotFoundException when customer ID does not exist")
     void testGetRewardsForCustomerForPeriod_CustomerNotFound() {
         when(customerRepository.findById(99L)).thenReturn(Optional.empty());
         LocalDate start = LocalDate.of(2025, 6, 1);
@@ -108,6 +117,7 @@ class RewardServiceTest {
     }
 
     @Test
+    @DisplayName("Should return zero rewards when there are no transactions in the given date range")
     void testGetRewardsForCustomerForPeriod_NoTransactionsInRange() throws Exception {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
 
@@ -122,6 +132,7 @@ class RewardServiceTest {
     }
 
     @Test
+    @DisplayName("Should correctly calculate rewards across multiple months in the period")
     void testGetRewardsForCustomerForPeriod_MultipleMonths() throws Exception {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
         when(transactionRepository.findByCustomerIdAndDateBetween(any(), any(), any())).thenReturn(transactions);
