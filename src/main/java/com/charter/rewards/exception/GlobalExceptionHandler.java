@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
      * @return a {@link ResponseEntity} containing error details such as timestamp, status, and message
      */
     @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleCustomerNotFound(CustomerNotFoundException ex) {
+    public ResponseEntity<Map<String, String>> handleCustomerNotFound(CustomerNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", ex.getMessage()));
     }
 
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
      * @return a {@link ResponseEntity} with HTTP 400 (Bad Request) status and an error message
      */
     @ExceptionHandler(DateTimeParseException.class)
-    public ResponseEntity<?> handleInvalidDateFormat(DateTimeParseException ex) {
+    public ResponseEntity<Map<String, String>> handleInvalidDateFormat(DateTimeParseException ex) {
         return ResponseEntity.badRequest().body(Map.of("error", "Invalid date format. Use yyyy-MM-dd"));
     }
 
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
      * @return a {@link ResponseEntity} with HTTP 400 (Bad Request) status and a descriptive error message
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 
