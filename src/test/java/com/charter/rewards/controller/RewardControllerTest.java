@@ -5,6 +5,7 @@ import com.charter.rewards.model.MonthlyReward;
 import com.charter.rewards.model.RewardSummary;
 import com.charter.rewards.service.RewardService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,7 @@ public class RewardControllerTest {
     }
 
     @Test
+    @DisplayName("Should return rewards summary successfully for valid customer and date range")
     void testGetRewardsForCustomer_Success() throws Exception {
         Mockito.when(rewardService.getRewardsForCustomerForPeriod(eq(1L), any(), any()))
                 .thenReturn(mockRewardSummary);
@@ -80,6 +82,7 @@ public class RewardControllerTest {
     }
 
     @Test
+    @DisplayName("Should return 400 Bad Request when customerId is missing")
     void testGetRewardsForCustomer_MissingCustomerId_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/rewards")
                         .param("start", "2025-06-01")
@@ -89,6 +92,7 @@ public class RewardControllerTest {
     }
 
     @Test
+    @DisplayName("Should return 400 Bad Request when start date is after end date")
     void testGetRewardsForCustomer_InvalidDateRange_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/rewards")
                         .param("customerId", "1")
@@ -99,6 +103,7 @@ public class RewardControllerTest {
     }
 
     @Test
+    @DisplayName("Should return 404 Not Found when customer does not exist")
     void testGetRewardsForCustomer_CustomerNotFound_ShouldReturn404() throws Exception {
         Mockito.when(rewardService.getRewardsForCustomerForPeriod(eq(99L), any(LocalDate.class), any(LocalDate.class)))
                 .thenThrow(new CustomerNotFoundException("Customer not found. Customer Id: 99"));
