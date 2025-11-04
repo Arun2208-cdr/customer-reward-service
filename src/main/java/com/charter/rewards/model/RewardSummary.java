@@ -1,16 +1,20 @@
 package com.charter.rewards.model;
 
-import java.util.Map;
+import java.util.List;
 
 public class RewardSummary {
+
     private Long customerId;
     private String name;
     private String phone;
     private String city;
     private int totalRewards;
-    private Map<String, Integer> monthlyRewards;
+    private List<MonthlyReward> monthlyRewards;
 
-    public RewardSummary(Long customerId, String name, String phone, String city, int totalRewards, Map<String, Integer> monthlyRewards) {
+    public RewardSummary() {
+    }
+
+    public RewardSummary(Long customerId, String name, String phone, String city, int totalRewards, List<MonthlyReward> monthlyRewards) {
         this.customerId = customerId;
         this.name = name;
         this.phone = phone;
@@ -59,11 +63,11 @@ public class RewardSummary {
         this.totalRewards = totalRewards;
     }
 
-    public Map<String, Integer> getMonthlyRewards() {
+    public List<MonthlyReward> getMonthlyRewards() {
         return monthlyRewards;
     }
 
-    public void setMonthlyRewards(Map<String, Integer> monthlyRewards) {
+    public void setMonthlyRewards(List<MonthlyReward> monthlyRewards) {
         this.monthlyRewards = monthlyRewards;
     }
 }
