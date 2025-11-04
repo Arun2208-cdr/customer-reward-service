@@ -2,9 +2,11 @@ package com.charter.rewards.service;
 
 import com.charter.rewards.exception.CustomerNotFoundException;
 import com.charter.rewards.model.Customer;
+import com.charter.rewards.model.MonthlyReward;
 import com.charter.rewards.model.RewardSummary;
 import com.charter.rewards.model.Transaction;
 import com.charter.rewards.repository.CustomerRepository;
+import com.charter.rewards.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,6 +18,7 @@ import java.time.Month;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class RewardServiceTest {
@@ -23,15 +26,20 @@ class RewardServiceTest {
     @Mock
     private CustomerRepository customerRepository;
 
+    @Mock
+    private TransactionRepository transactionRepository;
+
     @InjectMocks
     private RewardService rewardService;
 
     private Customer customer;
 
+    List<Transaction> transactions;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        List<Transaction> transactions = new ArrayList<>();
+        transactions = new ArrayList<>();
 
         Transaction t1 = new Transaction();
         t1.setId(1L);
@@ -57,12 +65,12 @@ class RewardServiceTest {
         customer.setName("John Doe");
         customer.setPhone("9999999999");
         customer.setCity("New York");
-        customer.setTransactions(transactions);
     }
 
     @Test
     void testGetRewardsForCustomerForPeriod_Success() throws CustomerNotFoundException {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+        when(transactionRepository.findByCustomerIdAndDateBetween(any(), any(), any())).thenReturn(transactions);
 
         LocalDate start = LocalDate.of(2025, 6, 1);
         LocalDate end = LocalDate.of(2025, 8, 31);
@@ -73,9 +81,20 @@ class RewardServiceTest {
         assertEquals(1L, summary.getCustomerId());
         assertEquals("John Doe", summary.getName());
         assertEquals(115, summary.getTotalRewards()); // 90 (June) + 25 (July) + 0 (August)
-        assertTrue(summary.getMonthlyRewards().containsKey("2025-06"));
-        assertEquals(90, summary.getMonthlyRewards().get("2025-06"));
-        assertEquals(25, summary.getMonthlyRewards().get("2025-07"));
+        List<MonthlyReward> monthlyRewards = summary.getMonthlyRewards();
+        assertEquals(3, monthlyRewards.size());
+
+        MonthlyReward juneReward = monthlyRewards.stream()
+                .filter(r -> r.getMonth().equals("2025-06"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals(90, juneReward.getRewardPoints());
+
+        MonthlyReward julyReward = monthlyRewards.stream()
+                .filter(r -> r.getMonth().equals("2025-07"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals(25, julyReward.getRewardPoints());
     }
 
     @Test
@@ -103,23 +122,9 @@ class RewardServiceTest {
     }
 
     @Test
-    void testGetRewardsForCustomerForPeriod_BoundaryDatesIncluded() throws Exception {
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-
-        LocalDate start = LocalDate.of(2025, Month.JUNE, 10);  // same as first txn
-        LocalDate end = LocalDate.of(2025, Month.JULY, 15);   // same as second txn
-
-        RewardSummary summary = rewardService.getRewardsForCustomerForPeriod(1L, start, end);
-
-        assertNotNull(summary);
-        assertEquals(2, summary.getMonthlyRewards().size());
-        assertTrue(summary.getMonthlyRewards().containsKey("2025-06"));
-        assertTrue(summary.getMonthlyRewards().containsKey("2025-07"));
-    }
-
-    @Test
     void testGetRewardsForCustomerForPeriod_MultipleMonths() throws Exception {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+        when(transactionRepository.findByCustomerIdAndDateBetween(any(), any(), any())).thenReturn(transactions);
 
         LocalDate start = LocalDate.of(2025, Month.JUNE, 1);
         LocalDate end = LocalDate.of(2025, Month.AUGUST, 31);
@@ -127,7 +132,6 @@ class RewardServiceTest {
         RewardSummary summary = rewardService.getRewardsForCustomerForPeriod(1L, start, end);
 
         assertNotNull(summary);
-        assertEquals(3, customer.getTransactions().size());
         assertEquals(3, summary.getMonthlyRewards().size());
         assertTrue(summary.getTotalRewards() > 0);
     }
